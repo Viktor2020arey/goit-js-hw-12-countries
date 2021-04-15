@@ -1,32 +1,78 @@
 import './styles.css';
 
-import pokemonCardTpl from './templates/pokemon-cards.hbs';
-import API from './api-service';
-import getRefs from './refs';
+import notify from './notify.js';
+import debounce from 'lodash.debounce';
 
-const refs = getRefs();
-refs.searchForm.addEventListener('submit', onSearch);
+import fetchCountries from './fetchCountries.js';
+import countryListTmpl from './templates/countryListItem.hbs';
+import countryTmpl from './templates/countryList.hbs';
 
-function onSearch(e) {
-  e.preventDefault();
+const refs = {
+  input: document.querySelector('.js-input-search'),
+  countryList: document.querySelector('.js-country-list'),
+};
 
-  const form = e.currentTarget;
-  const searchQuery = form.elements.query.value;
+refs.input.addEventListener('input', debounce(searchCountries, 1000));
 
-  API.fetchById(searchQuery)
-    .then(renderPocemonCard)
-    .catch(onFetchError)
-    .finally(() => form.reset());
+function searchCountries(e) {
+  const searchValue = e.target.value;
+  clearList();
+
+  fetchCountries.fetchCountries(searchValue).then(data => {
+    if (data.length > 10) {
+      notify('Too many matches found. Please enter a more specific query!');
+    } else if (data.length > 1) {
+      const markuplist = buildListMarkupList(data);
+      insertItemCountrie(markuplist);
+    } else {
+      const markupItem = buildListMarkupItem(data);
+      insertItemCountrie(markupItem);
+    }
+  });
 }
 
-function renderPocemonCard(pokemon) {
-  const markup = pokemonCardTpl(pokemon);
-  refs.cardContainer.innerHTML = markup;
+function insertItemCountrie(items) {
+  refs.countryList.insertAdjacentHTML('beforeend', items);
 }
 
-function onFetchError(error) {
-  alert('Упс, мы не нашли твоего героя');
+function buildListMarkupItem(items) {
+  return countryListTmpl(items);
 }
+
+function buildListMarkupList(items) {
+  return countryTmpl(items);
+}
+
+function clearList() {
+  refs.countryList.innerHTML = '';
+}
+// import pokemonCardTpl from './templates/pokemon-cards.hbs';
+// import API from './api-service';
+// import getRefs from './refs';
+
+// const refs = getRefs();
+// refs.searchForm.addEventListener('submit', onSearch);
+
+// function onSearch(e) {
+//   e.preventDefault();
+
+//   const form = e.currentTarget;
+//   const searchQuery = form.elements.query.value;
+
+//   API.fetchById(searchQuery)
+//     .then(renderPocemonCard)
+//     .catch(onFetchError)
+//     .finally(() => form.reset());
+// }
+
+// function renderPocemonCard(pokemon) {
+//   const markup = pokemonCardTpl(pokemon);
+//   refs.cardContainer.innerHTML = markup;
+// }
+
+// function onFetchError(error) {
+//   alert('Упс, мы не нашли твоего героя');
+// }
 // =========================================================================
 // const url = 'https://newsapi.org/v2/everything?q=cars';
 // const options = {
