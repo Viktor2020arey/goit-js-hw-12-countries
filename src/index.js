@@ -3,7 +3,7 @@ import './styles.css';
 import notify from './notify.js';
 import debounce from 'lodash.debounce';
 
-import fetchCountries from './fetchCountries.js';
+import fetchCountriesSearch from './fetchCountries.js';
 import countryListTmpl from './templates/countryListItem.hbs';
 import countryTmpl from './templates/countryList.hbs';
 
@@ -18,7 +18,7 @@ function searchCountries(e) {
   const searchValue = e.target.value;
   clearList();
 
-  fetchCountries.fetchCountries(searchValue).then(data => {
+  fetchCountriesSearch.fetchCountries(searchValue).then(data => {
     if (data.length > 10) {
       notify('Too many matches found. Please enter a more specific query!');
     } else if (data.length > 1) {
