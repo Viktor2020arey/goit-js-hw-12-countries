@@ -18,7 +18,7 @@ function searchCountries(e) {
   clearList();
 
   fetchCountriesSearch.fetchCountries(searchValue).then(data => {
-    if (data.length >= 10) {
+    if (data.length > 10) {
       notify('Too many matches found. Please enter a more specific query!');
     } else if (data.length > 1) {
       const markuplist = buildListMarkupList(data);
