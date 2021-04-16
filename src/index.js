@@ -18,12 +18,12 @@ function searchCountries(e) {
   clearList();
 
   fetchCountriesSearch.fetchCountries(searchValue).then(data => {
-    if (data.length > 10) {
+    if (data.length >= 10) {
       notify('Too many matches found. Please enter a more specific query!');
     } else if (data.length > 1) {
       const markuplist = buildListMarkupList(data);
       insertItemCountrie(markuplist);
-    } else {
+    } else if (data.length === 1) {
       const markupItem = buildListMarkupItem(data);
       insertItemCountrie(markupItem);
     }
