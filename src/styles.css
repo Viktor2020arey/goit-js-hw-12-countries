@@ -26,11 +26,13 @@ img {
 
 .js-search-form {
   margin-bottom: 30px;
+  text-align: center;
 }
 
 .name {
   font-size: 24px;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .js-card-container {
@@ -38,7 +40,6 @@ img {
   margin: 0 auto;
   padding-top: 30px;
   padding-bottom: 30px;
-  text-align: center;
 }
 
 .countrieItem {
